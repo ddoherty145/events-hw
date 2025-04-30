@@ -45,5 +45,3 @@ class Event(db.Model):
         secondary=guest_event_table,
         back_populates='events_attending',
     )
-
-guest_event_table = None

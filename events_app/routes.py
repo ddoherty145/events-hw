@@ -2,8 +2,7 @@
 import os
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from datetime import date, datetime
-from events_app.models import Event, Guest
-from events_app import db, app
+from events_app.models import Event, Guest, EventTypeEnum
 
 # Import app and db from events_app package so that we can run app
 from events_app import app, db
@@ -30,6 +29,8 @@ def create():
     if request.method == 'POST':
         new_event_title = request.form.get('title')
         new_event_description = request.form.get('description')
+        new_event_location = request.form.get('location')  # Add this line
+        new_event_type = request.form.get('event_type')  # Add this line
         date = request.form.get('date')
         time = request.form.get('time')
 
@@ -41,7 +42,22 @@ def create():
             return render_template('create.html', 
                 error='Incorrect datetime format! Please try again.')
 
-        event = Event(title=new_event_title, description=new_event_description, date_and_time=date_and_time)
+        # Convert event_type string to enum value
+        event_type_enum = EventTypeEnum.OTHER  # Default to OTHER
+        try:
+            event_type_enum = EventTypeEnum[new_event_type.upper()] if new_event_type else EventTypeEnum.OTHER
+        except (KeyError, AttributeError):
+            # If the event type is not valid, use OTHER
+            pass
+
+        event = Event(
+            title=new_event_title, 
+            description=new_event_description, 
+            date_and_time=date_and_time,
+            location=new_event_location or "TBD",  # Provide a default if empty
+            event_type=event_type_enum
+        )
+        
         db.session.add(event)
         db.session.commit()
 
@@ -49,7 +65,6 @@ def create():
         return redirect(url_for('main.index'))
     else:
         return render_template('create.html')
-
 
 @main.route('/event/<event_id>', methods=['GET'])
 def event_detail(event_id):

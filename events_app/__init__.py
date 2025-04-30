@@ -14,4 +14,8 @@ from events_app.routes import main
 app.register_blueprint(main)
 
 with app.app_context():
+
+    from events_app.models import Event, Guest, guest_event_table
+
+    db.drop_all()
     db.create_all()

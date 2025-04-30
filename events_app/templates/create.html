@@ -7,7 +7,7 @@
     <p>
         <label>
             Event Title:
-            <input type="text" name="title">
+            <input type="text" name="title" required>
         </label>
     </p>
     <p>
@@ -16,15 +16,35 @@
             <textarea name="description"></textarea>
         </label>
     </p>
+    <p>
+        <label>
+            Location: <br>
+            <input type="text" name="location" required>
+        </label>
+    </p>
+    <p>
+        <label>
+            Event Type: <br>
+            <select name="event_type" required>
+                <option value="PARTY">Party</option>
+                <option value="STUDY">Study</option>
+                <option value="NETWORKING">Networking</option>
+                <option value="MEETUP">Meetup</option>
+                <option value="MEETING">Meeting</option>
+                <option value="MOVIE">Movie</option>
+                <option value="CONCERT">Concert</option>
+                <option value="OTHER">Other</option>
+            </select>
+        </label>
+    </p>
     {% if error %}
         <p class="error">Error: {{ error }}</p>
     {% endif %}
     <p>
-        
         <label>
             Date and Time: <br>
-            <input type="date" name="date" placeholder="Date format YYYY-mm-dd">
-            <input type="time" name="time" placeholder="Time format HH:MM">
+            <input type="date" name="date" placeholder="Date format YYYY-mm-dd" required>
+            <input type="time" name="time" placeholder="Time format HH:MM" required>
         </label>
     </p>
     <p>
