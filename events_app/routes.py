@@ -29,8 +29,8 @@ def create():
     if request.method == 'POST':
         new_event_title = request.form.get('title')
         new_event_description = request.form.get('description')
-        new_event_location = request.form.get('location')  # Add this line
-        new_event_type = request.form.get('event_type')  # Add this line
+        new_event_location = request.form.get('location')
+        new_event_type = request.form.get('event_type')
         date = request.form.get('date')
         time = request.form.get('time')
 
@@ -42,19 +42,19 @@ def create():
             return render_template('create.html', 
                 error='Incorrect datetime format! Please try again.')
 
-        # Convert event_type string to enum value
-        event_type_enum = EventTypeEnum.OTHER  # Default to OTHER
+        
+        event_type_enum = EventTypeEnum.OTHER
         try:
             event_type_enum = EventTypeEnum[new_event_type.upper()] if new_event_type else EventTypeEnum.OTHER
         except (KeyError, AttributeError):
-            # If the event type is not valid, use OTHER
+            
             pass
 
         event = Event(
             title=new_event_title, 
             description=new_event_description, 
             date_and_time=date_and_time,
-            location=new_event_location or "TBD",  # Provide a default if empty
+            location=new_event_location or "TBD",
             event_type=event_type_enum
         )
         
@@ -66,7 +66,7 @@ def create():
     else:
         return render_template('create.html')
 
-@main.route('/event/<event_id>', methods=['GET'])
+@main.route('/event/<int:event_id>', methods=['GET'])
 def event_detail(event_id):
     """Show a single event."""
 
@@ -102,7 +102,7 @@ def rsvp(event_id):
     return redirect(url_for('main.event_detail', event_id=event_id))
 
 
-@main.route('/guest/<guest_id>')
+@main.route('/guest/<int:guest_id>')
 def guest_detail(guest_id):
     
     guest = Guest.query.get_or_404(guest_id)
